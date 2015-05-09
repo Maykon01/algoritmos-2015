@@ -1,0 +1,98 @@
+#include "stdafx.h"
+#include "stdio.h"
+#include "conio.h"
+#include <string>
+#include <iostream>
+
+using namespace std;
+//declaracion de la estructura del archivo
+struct tipo_registro   
+{
+	int no_prod;
+	string descrip;
+	int cantidad;
+	float precio;
+	char garantia;
+};
+
+tipo_registro Registro;
+// declara alias al archivo como puntero
+FILE*alias;
+//Declaracion del prototipo
+bool ALTA_SECUENCIAL();
+
+int main()
+{
+	int cuantos_quiero;   
+	cout << "Cuantos registros desea ingresar? ";
+	cin >> cuantos_quiero;
+
+	int n_ingresados = 0;
+	while (n_ingresados < cuantos_quiero)
+	{
+		bool adiciono = ALTA_SECUENCIAL();
+		if (adiciono)
+		{
+			n_ingresados += 1;
+		}
+	}
+
+	getch();
+	return 0;
+}
+
+bool ALTA_SECUENCIAL()
+{
+	int no_prod; // Variable local para el numero de producto
+
+	cout << "\n\n\n\rALTAS DE REGISTROS DE PRODUCTOS";
+	cout << "\n\n\n\rNumero de producto: ";
+	cin >> no_prod;
+	cin.ignore();
+	
+	alias = fopen("PRODUCTO.SEC","rb+"); // Intenta abrir el archivo
+	// en modo de lectura/escritura
+	if (alias == NULL)
+	{
+		alias = fopen("PRODUCTO.SEC", "wb"); // Crea el archivo en caso de no existir
+	}
+	else
+	{
+		fread(&Registro,sizeof(Registro),1,alias);
+		// Lee el "Registro", de tamano=sizeof(Registro) del archivo "alias(nombre logico del archivo)"
+		while (!feof(alias)) // Ciclo mientras no se encuentre el final del archivo
+		{
+			if(Registro.no_prod == no_prod)
+			{
+				cout << "\n\n\n\rRegistro ya existe!!!";
+				fclose(alias);
+				return false;
+			}
+			fread(&Registro,sizeof(Registro),1,alias);
+		}
+		
+		fclose(alias);
+		alias = fopen("PRODUCTO.SEC", "ab");
+	}
+
+	// Si llegamos hasta este punto, es porque podemos adicionar
+	cout << "\n\rDescripcion: ";
+	getline(cin, Registro.descrip);
+	cout << "\n\rCantidad : ";
+	cin >> Registro.cantidad;
+	cout << "\n\rPrecio : ";
+	cin >> Registro.precio;
+	do
+	{
+		cout << "\n\rGarantia : ";
+		Registro.garantia = toupper(getch());
+	}
+	while (Registro.garantia!='S' && Registro.garantia!='N');
+
+	Registro.no_prod = no_prod;
+	fwrite(&Registro,sizeof(Registro),1,alias); // Grabar el Registro
+	fclose(alias); // Cierra el archivo
+	cout << "\n\n\n\rProducto registrado !!!";
+		
+	return true;
+}
