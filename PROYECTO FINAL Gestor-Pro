@@ -1,0 +1,1499 @@
+//source.h
+#include <stdio.h>
+#include <stdlib.h>  //libreria standar c
+#include <iostream>
+#include <iomanip>
+#include <conio.h> 
+#include "cstdlib" //libreira standar c++
+
+using namespace std;
+
+
+#include "Estructura.h"
+#include "Validaciones.h"
+#include "Proyecto.h"
+#include "Inversionista.h"
+#include "Inversiones.h"
+#include "Egresos.h"
+#include "Configura.h"
+#include "Reporte.h"
+
+void MenuUsuario(void);
+
+
+  
+
+ void MenuUsuario2()
+ {int op;
+ char aux[20];
+	 do {  
+		 system("cls");
+		 system("color B1");
+	
+	  cout<<endl<<"   ***   Gestor de Proyectos   ***  ";
+	  cout<<endl<<" 1 Reporte de Inversion Por Proyecto :";
+	  cout<<endl<<" 2 Reporte de Egreso Por Proyecto :";
+	  cout<<endl<<" 3 Reporte de Utilida Por proyecto :";
+	  cout<<endl<<" 9 salir:";
+	  
+	  fflush(stdin);
+	  do{ cout<<endl<<"opcion:";
+		  gets(aux);  //// Dato tipo char
+	  }while((Cadena_No_Blanca(aux)) || (ValidarDatoDeEntradaInt(aux)));
+	  
+	   op = Conver_Char_Int(aux);
+	   switch (op)
+	  {
+
+	  case 1:ReporteDeInversiones();break;
+	  case 2:ReporteDeEgreso();break;
+	  case 3:Reporte();break;
+	   }
+
+	 }while(op != 9);
+	   system("cls");
+	 MenuUsuario();
+	
+
+ }
+void MenuUsuario1()
+{int op;
+
+     char aux[20],aux1[20];
+   
+	     
+	    
+	        system("color B1");
+		
+		
+	
+	
+	          
+	   
+	        do{    system("cls");
+               fflush(stdin);  
+	        cout<<endl<<"***ingrese contraseña usuario 1   ***  ";
+		    cout<<endl<<" 9. salir.                    "<<endl;				
+				 
+				//cout<<endl<<"opcion:";
+		      //// Dato tipo char
+			 cin>>aux1;
+			
+        
+
+	        }while( ( 0 != strcmp(aux1,"MININA")) && ( 0 != strcmp(aux1,"9"))       );
+	         
+			int x;
+	   x= strcmp(aux1,"9");
+	        if(0 == x )
+			
+			{ system("cls");
+				MenuUsuario();
+	         }
+	  
+//-----------------------------------------
+ 
+	
+   
+	    system("cls");
+	
+		
+  do {
+	
+	  cout<<endl<<"   ***   Gestor de Proyectos   ***  ";
+	  cout<<endl<<" 1 Proyectos:";
+	  cout<<endl<<" 2 Inversionista:";
+	  cout<<endl<<" 3 Inversion:";
+	  cout<<endl<<" 4 Egresos:";
+	  cout<<endl<<" 5 Config.txt";
+	  cout<<endl<<" 6 Reporte de Inversion Por Proyecto :";
+	  cout<<endl<<" 7 Reporte de Egreso Por Proyecto :";
+	  cout<<endl<<" 8 Reporte de Utilida Por proyecto :";
+	  cout<<endl<<" 9 salir:";
+	  
+	  fflush(stdin);//Limpiando el buffer
+	  do{ cout<<endl<<"opcion:";
+		  gets(aux);  //// Dato tipo char
+	  }while((Cadena_No_Blanca(aux)) || (ValidarDatoDeEntradaInt(aux)));
+	  
+	   op = Conver_Char_Int(aux);
+	   switch (op)
+	  {
+
+	  case 1:MenuProyecto();break;
+	  case 2:MenuInversionista();break;
+	  case 3:MenuInversion();break;
+	  case 4:MenuEgreso();break;
+	  case 5:MenuConfig();break;
+	  case 6:ReporteDeInversiones();break;
+	  case 7:ReporteDeEgreso();break;
+	  case 8:Reporte();break;
+	   }
+
+	 }while(op != 9);
+  system("cls");
+				MenuUsuario();
+}	
+
+
+    
+
+void MenuUsuario(void)
+{int op;
+char aux[20];
+ 
+
+	do
+	{   
+	
+	system("cls");
+	  cout<<endl<<"   ***   Acceso de Gestor de Proyectos   ***  ";
+	  cout<<endl<<" 1 Usuario 1";
+	  cout<<endl<<" 2 Usuario 2";
+	  
+	  cout<<endl<<" 9 salir:";
+	  
+	  fflush(stdin);
+	  do{ cout<<endl<<"opcion:";
+		  gets(aux);  //// Dato tipo char
+	  }while((Cadena_No_Blanca(aux)) || (ValidarDatoDeEntradaInt(aux)));
+	  op = Conver_Char_Int(aux);
+	  
+	  if (op==1) MenuUsuario1();
+	  if(op==2) MenuUsuario2();
+
+	     
+    
+	}while(op != 9);
+	
+
+}
+
+
+int main()
+{  MenuUsuario();
+ 
+ return 0;
+}
+
+
+
+
+//Proyecto.h
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+#include <conio.h>
+
+void CrearArchivoProyecto( char nomArchivo[15]){
+FILE *ptr;
+ptr=fopen(nomArchivo,"wb");
+fclose(ptr);
+
+}
+void SolicitarDatosProyecto(Proyecto *reg){
+    char aux[20]; 
+	fflush(stdin);
+	 do{
+	 cout<<endl<<" IDProyecto :";
+	 gets(aux);
+	 }while((Cadena_No_Blanca(aux) || ValidarDatoDeEntradaInt(aux)) || ValidarIdProyecto(Conver_Char_Int(aux)));
+	 reg->idProyecto = Conver_Char_Int(aux);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<"Nombre:";
+	   gets(reg->nombre);
+	 }while(strlen(reg->nombre)== 0);
+	 fflush(stdin);
+	 reg->estado = 'N';   ////  estado para saber que esta abilitado N 
+}
+void mostrarRegistroProyecto(Proyecto reg, int nroReg){
+	cout<<endl<<nroReg<<".-  "<<reg.idProyecto<<"      "<<reg.nombre;
+}
+void AdicionarRegistroProyecto(char nomArchivo[15]){
+FILE *ptr;
+Proyecto reg;
+ptr = fopen(nomArchivo,"ab");
+SolicitarDatosProyecto(&reg);
+fwrite(&reg,sizeof(struct Proyecto),1,ptr);
+fclose(ptr);
+}
+void BuscarRegistroProyecto(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Proyecto reg;
+ptr = fopen(nomArchivo,"rb");
+if( ptr == NULL){
+	cout<<endl<<" NO EXISTE ARCHVIO ...";
+}else{
+	fseek(ptr,(nroReg -1)*sizeof(struct Proyecto),SEEK_SET);
+	fread(&reg,sizeof(struct Proyecto),1,ptr);
+	if(feof(ptr)){
+	cout<<endl<<" el registro no existe... "<<endl; 
+	}else{
+		if(reg.estado == 'N'){
+		 mostrarRegistroProyecto(reg,nroReg);
+		}
+		else{
+			cout<<endl<<" El Registro esta elimnado...";
+		}
+		fclose(ptr);
+
+	}
+    
+}
+}
+void ModificarRegistroProyecto(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Proyecto reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIV NO EXISTE...";
+}
+else
+{
+	fseek(ptr,(nroReg-1)*sizeof(struct Proyecto),SEEK_SET);
+fread(&reg,sizeof(struct Proyecto),1,ptr);
+	if(feof(ptr))
+	{
+			cout<<endl<<" El Registro no existe..."<<endl;
+	}
+	else{
+		if(reg.estado == 'N'){
+		   cout<<endl<<"nroReg    idProyecto      Nombre ";
+		   mostrarRegistroProyecto(reg,nroReg);
+		   SolicitarDatosProyecto(&reg);
+		   fseek(ptr,(nroReg-1)*sizeof(struct Proyecto),SEEK_SET);
+		   fwrite(&reg,sizeof(struct Proyecto),1,ptr);
+		}
+		else{
+		cout<<endl<<" Registro Eliminado...";
+		fclose(ptr);
+		}
+	 }
+}
+}
+void EliminarRegistroProyecto(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Proyecto reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE...."<<endl;
+}else{
+fseek(ptr,(nroReg-1)*sizeof(struct Proyecto),SEEK_SET);
+fread(&reg,sizeof(struct Proyecto),1,ptr);
+if(feof(ptr)){
+cout<<endl<<" EL Registro No Existe..."<<endl;
+}
+else{
+	if(reg.estado == 'N'){
+        cout<<endl<<"nroReg  idProyecto      Nombre ";
+		mostrarRegistroProyecto(reg,nroReg);
+		reg.estado = 'S';
+		fseek(ptr,(nroReg-1)*sizeof(struct Proyecto),SEEK_SET);
+		fwrite(&reg,sizeof(struct Proyecto),1,ptr);
+		cout<<endl<<" Registro Eliminado Exitosamente..."<<endl;
+	}
+	else{
+		cout<<endl<<" Registro Eliminado.."<<endl;
+	}
+	fclose(ptr);
+}
+}
+}
+void ListarArchivoProyecto(char nomArchivo[15]){
+FILE *ptr;
+Proyecto reg;
+int cont = 0;
+ptr = fopen(nomArchivo,"rb");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE..."<<endl;
+}
+else{
+cout<<endl<<"****   LISTAR ARCHIVO      ****";
+cout<<endl<<"nroReg     idProyecto        Nombre ";
+cout<<endl<<"=================================";
+fread(&reg,sizeof(struct Proyecto),1,ptr);
+while(!feof(ptr)){
+	if(reg.estado == 'N')
+	mostrarRegistroProyecto(reg,cont+1);
+	fread(&reg,sizeof(struct Proyecto),1,ptr);
+	cont++;
+}
+fclose(ptr);
+}
+}
+void HolaArchivoProyecto(char nomArchivo[15]){
+FILE *ptr;
+Proyecto reg;
+int cont = 0;
+ptr = fopen(nomArchivo,"rb");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE..."<<endl;
+}
+else{
+cout<<endl<<"****   HOLA PROFE      ****";
+cout<<endl<<"nroReg     idProyecto        Nombre ";
+cout<<endl<<"=================================";
+fread(&reg,sizeof(struct Proyecto),1,ptr);
+while(!feof(ptr)){
+	if(reg.estado == 'N')
+	mostrarRegistroProyecto(reg,cont+1);
+	fread(&reg,sizeof(struct Proyecto),1,ptr);
+	cont++;
+}
+fclose(ptr);
+}
+}
+void MenuProyecto(){ 
+int opc,nroReg; char nomArchivo[15]; char op[20]; 
+do{ 
+    system("pause");
+	system("cls");
+cout<<endl<<" *** MENU    PROYECTO   *** ";
+cout<<endl<<" 1 Crear Archivo :";
+cout<<endl<<" 2 Adicionar Registro :";
+cout<<endl<<" 3 Buscar Registro :";
+cout<<endl<<" 4 Modoficar Registro :";
+cout<<endl<<" 5 Eliminar Registro :";
+cout<<endl<<" 6 Listar Archivo :";
+cout<<endl<<" 8 algoritmos extra  ";
+cout<<endl<<" 7 Atras :";
+ fflush(stdin);
+do{cout<<endl<<"opcion:";
+   gets(op);  
+}while(Cadena_No_Blanca(op) || ValidarDatoDeEntradaInt(op));
+opc = Conver_Char_Int(op);
+switch(opc){
+case 1: CrearArchivoProyecto("Proyecto.dat");break;
+case 2: AdicionarRegistroProyecto("Proyecto.dat");break;
+case 3: cout<<endl<<" numero de registro :";cin>>nroReg;BuscarRegistroProyecto("Proyecto.dat",nroReg);break;
+case 4: cout<<endl<<" numero de registro :";cin>>nroReg;ModificarRegistroProyecto("Proyecto.dat",nroReg);break;
+case 5: cout<<endl<<" numero de registro :";cin>>nroReg;EliminarRegistroProyecto("Proyecto.dat",nroReg);break;
+case 6: ListarArchivoProyecto("Proyecto.dat");break;
+case 8:HolaArchivoProyecto("Proyecto.dat");
+
+}
+}
+while(opc != 7);
+
+system("pause");
+
+}
+
+
+
+//inversioniste.h
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+#include <conio.h>
+
+void CrearArchivoInversionista( char nomArchivo[15]){
+FILE *ptr;
+ptr=fopen(nomArchivo,"wb");
+fclose(ptr);
+}
+void SolicitarDatosInversionista(Inversionista *reg){
+   char aux[20];  
+	fflush(stdin);
+	 do{
+		 cout<<endl<<" IDInversionista :";
+	     gets(aux);
+	 }while((Cadena_No_Blanca(aux) ||  ValidarDatoDeEntradaInt(aux)) || ValidarIdInversionista(Conver_Char_Int(aux))); 	 
+	 reg->idInversionista = Conver_Char_Int(aux);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<"Nombre:";
+	   gets(reg->nombre);
+	 }while(strlen(reg->nombre)== 0);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<" cedula de indentidad:";
+	   gets(reg->ci);
+	 }while(strlen(reg->ci)== 0);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<" E-mail :";
+	   gets(reg->email);
+	 }while(strlen(reg->email)== 0);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<" telefono :";
+	   gets(reg->telefono);
+	 }while(strlen(reg->telefono)== 0);
+	 
+	 reg->estado = 'N';   ////  estado para saber que esta abilitado N 
+}
+void mostrarRegistroInversionista(Inversionista reg, int nroReg){
+	//---if (reg.cliente==n)
+	//{
+	cout<<endl<<nroReg<<".-  "<<reg.idInversionista<<"     "<<reg.nombre<<"    "<<reg.ci<<"   "<<reg.telefono<<"   "<<reg.email;
+	//}
+}
+void AdicionarRegistroInversionista(char nomArchivo[15]){
+FILE *ptr;
+Inversionista reg;
+ptr = fopen(nomArchivo,"ab");
+SolicitarDatosInversionista(&reg);
+fwrite(&reg,sizeof(struct Inversionista),1,ptr);
+fclose(ptr);
+}
+void BuscarRegistroInversionista(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Inversionista reg;
+ptr = fopen(nomArchivo,"rb");
+if( ptr == NULL){
+	cout<<endl<<" NO EXISTE ARCHVIO ...";
+}else{
+	fseek(ptr,(nroReg -1)*sizeof(struct Inversionista),SEEK_SET);
+	fread(&reg,sizeof(struct Inversionista),1,ptr);
+	if(feof(ptr)){
+	cout<<endl<<" el registro no existe... "<<endl; 
+	}else{
+		if(reg.estado == 'N'){
+		 mostrarRegistroInversionista(reg,nroReg);
+		}
+		else{
+			cout<<endl<<" El Registro esta elimnado...";
+		}
+		fclose(ptr);
+
+	}
+    
+}
+}
+void ModificarRegistroInversionista(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Inversionista reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIV NO EXISTE...";
+}
+else
+{
+fseek(ptr,(nroReg-1)*sizeof(struct Inversionista),SEEK_SET);
+fread(&reg,sizeof(struct Inversionista),1,ptr);
+	if(feof(ptr))
+	{
+			cout<<endl<<" El Registro no existe..."<<endl;
+	}
+	else{
+		if(reg.estado == 'N'){
+		   cout<<endl<<"nroReg    idInversionista      Nombre      cedula    telefono       e-mail";
+		   mostrarRegistroInversionista(reg,nroReg);
+		   SolicitarDatosInversionista(&reg);
+		   fseek(ptr,(nroReg-1)*sizeof(struct Inversionista),SEEK_SET);
+		   fwrite(&reg,sizeof(struct Inversionista),1,ptr);
+		}
+		else{
+		cout<<endl<<" Registro Eliminado...";
+		fclose(ptr);
+		}
+	 }
+}
+}
+void EliminarRegistroInversionista(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Inversionista reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE...."<<endl;
+}else{
+fseek(ptr,(nroReg-1)*sizeof(struct Inversionista),SEEK_SET);
+fread(&reg,sizeof(struct Inversionista),1,ptr);
+if(feof(ptr)){
+cout<<endl<<" EL Registro No Existe..."<<endl;
+}
+else{
+	if(reg.estado == 'N'){
+        cout<<endl<<"nroReg  idInversionista      Nombre ";
+		mostrarRegistroInversionista(reg,nroReg);
+		reg.estado = 'S';
+		fseek(ptr,(nroReg-1)*sizeof(struct Inversionista),SEEK_SET);
+		fwrite(&reg,sizeof(struct Inversionista),1,ptr);
+		cout<<endl<<" Registro Eliminado Exitosamente..."<<endl;
+	}
+	else{
+		cout<<endl<<" Registro Eliminado.."<<endl;
+	}
+	fclose(ptr);
+}
+}
+}
+void ListarArchivoInversionista(char nomArchivo[15]){
+FILE *ptr;
+Inversionista reg;
+int cont = 0;
+ptr = fopen(nomArchivo,"rb");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE..."<<endl;
+}
+else{
+cout<<endl<<"****   LISTAR ARCHIVO      ****";
+cout<<endl<<"nroReg     idInversionista        Nombre       cedula     telefono      e-mail";
+cout<<endl<<"==============================================================================";
+fread(&reg,sizeof(struct Inversionista),1,ptr);
+while(!feof(ptr)){
+	if(reg.estado == 'N')
+		mostrarRegistroInversionista(reg,cont+1);
+	fread(&reg,sizeof(struct Inversionista),1,ptr);
+	cont++;
+}
+fclose(ptr);
+}
+}
+void MenuInversionista(){ 
+int opc,nroReg; char nomArchivo[15]; char op[20]; 
+do{ 
+    system("pause");
+	system("cls");
+cout<<endl<<" *** MENU    Inversionista   *** ";
+cout<<endl<<" 1 Crear Archivo :";
+cout<<endl<<" 2 Adicionar Registro :";
+cout<<endl<<" 3 Buscar Registro :";
+cout<<endl<<" 4 Modoficar Registro :";
+cout<<endl<<" 5 Eliminar Registro :";
+cout<<endl<<" 6 Listar Archivo :";
+cout<<endl<<" 7 Atras :";
+ fflush(stdin);
+do{cout<<endl<<"opcion:";
+   gets(op);  
+}while(Cadena_No_Blanca(op) || ValidarDatoDeEntradaInt(op));
+opc = Conver_Char_Int(op);
+switch(opc){
+case 1: CrearArchivoInversionista("Inversionista.dat");break;
+case 2: AdicionarRegistroInversionista("Inversionista.dat");break;
+case 3: cout<<endl<<" numero de registro :";cin>>nroReg;BuscarRegistroInversionista("Inversionista.dat",nroReg);break;
+case 4: cout<<endl<<" numero de registro :";cin>>nroReg;ModificarRegistroInversionista("Inversionista.dat",nroReg);break;
+case 5: cout<<endl<<" numero de registro :";cin>>nroReg;EliminarRegistroInversionista("Inversionista.dat",nroReg);break;
+case 6: ListarArchivoInversionista("Inversionista.dat");break;
+}
+}
+while(opc != 7);
+
+system("pause");
+}
+
+
+
+
+//inversion.h
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+#include <conio.h>
+
+
+
+void CrearArchivoInversion( char nomArchivo[15]){
+FILE *ptr;
+ptr=fopen(nomArchivo,"wb");
+fclose(ptr);
+}
+void SolicitarDatosInversion(Inversion *reg){
+    char aux[20]; 
+	fflush(stdin);
+	 do{
+		 strcpy(aux," ");
+	     cout<<endl<<" IDInversion :";
+	     gets(aux);
+	   }while((Cadena_No_Blanca(aux) || ValidarDatoDeEntradaInt(aux)) || ValidarIdInversion(Conver_Char_Int(aux)));
+	 reg->idinversion = Conver_Char_Int(aux);
+	 fflush(stdin);
+	 do{ 
+		 strcpy(aux," ");
+		 cout<<endl<<" monto :";
+	     gets(aux);
+	 }while( Cadena_No_Blanca(aux)  || ValidarDatoDeEntradaFloat(aux));
+	 reg->monto = Cover_Char_Float(aux);
+	  fflush(stdin);
+	 do{
+	   cout<<endl<<" fecha  dias/mes/ano : ";
+	   gets(reg->fecha);
+	 }while(strlen(reg->fecha)== 0);
+	 fflush(stdin);
+	 do
+	 { strcpy(aux," ");
+	   cout<<endl<<" idProyecto :";
+	   gets(aux);
+	 } while(( Cadena_No_Blanca(aux) || ValidarDatoDeEntradaInt(aux)) || !ValidarIdProyecto(Conver_Char_Int(aux)));
+	 reg->idProyecto = Conver_Char_Int(aux);
+	 fflush(stdin);
+	 do{ 
+		 strcpy(aux," ");
+		 cout<<endl<<" IdInversionista :";
+	     gets(aux);
+	 }while((Cadena_No_Blanca(aux) || ValidarDatoDeEntradaFloat(aux)) || !ValidarIdInversionista(Conver_Char_Int(aux)));
+	 reg->idInversionista = Conver_Char_Int(aux);
+
+	 reg->estado = 'N';   ////  estado para saber que esta abilitado N 
+}
+void mostrarRegistroInversion(Inversion reg, int nroReg){
+	cout<<endl<<nroReg<<".-  "<<reg.idinversion<<"     "<<reg.monto<<"    "<<reg.fecha<<"   "<<reg.idProyecto<<"   "<<reg.idInversionista;
+}
+void AdicionarRegistroInversion(char nomArchivo[15]){
+FILE *ptr;
+Inversion reg;
+ptr = fopen(nomArchivo,"ab");
+SolicitarDatosInversion(&reg);
+fwrite(&reg,sizeof(struct Inversion),1,ptr);
+fclose(ptr);
+}
+void BuscarRegistroInversion(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Inversion reg;
+ptr = fopen(nomArchivo,"rb");
+if( ptr == NULL){
+	cout<<endl<<" NO EXISTE ARCHVIO ...";
+}else{
+	fseek(ptr,(nroReg -1)*sizeof(struct Inversion),SEEK_SET);
+	fread(&reg,sizeof(struct Inversion),1,ptr);
+	if(feof(ptr)){
+	cout<<endl<<" el registro no existe... "<<endl; 
+	}else{
+		if(reg.estado == 'N'){
+		 mostrarRegistroInversion(reg,nroReg);
+		}
+		else{
+			cout<<endl<<" El Registro esta elimnado...";
+		}
+		fclose(ptr);
+
+	}
+    
+}
+}
+void ModificarRegistroInversion(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Inversion reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIV NO EXISTE...";
+}
+else
+{
+fseek(ptr,(nroReg-1)*sizeof(struct Inversion),SEEK_SET);
+fread(&reg,sizeof(struct Inversion),1,ptr);
+	if(feof(ptr))
+	{
+			cout<<endl<<" El Registro no existe..."<<endl;
+	}
+	else{
+		if(reg.estado == 'N'){
+		   cout<<endl<<"nroReg    idInversion      Monto      Fecha    idProyecto     idInversionista";
+		   mostrarRegistroInversion(reg,nroReg);
+		   SolicitarDatosInversion(&reg);
+		   fseek(ptr,(nroReg-1)*sizeof(struct Inversion),SEEK_SET);
+		   fwrite(&reg,sizeof(struct Inversion),1,ptr);
+		}
+		else{
+		cout<<endl<<" Registro Eliminado...";
+		fclose(ptr);
+		}
+	 }
+}
+}
+void EliminarRegistroInversion(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Inversion reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE...."<<endl;
+}else{
+fseek(ptr,(nroReg-1)*sizeof(struct Inversion),SEEK_SET);
+fread(&reg,sizeof(struct Inversion),1,ptr);
+if(feof(ptr)){
+cout<<endl<<" EL Registro No Existe..."<<endl;
+}
+else{
+	if(reg.estado == 'N'){
+        cout<<endl<<"nroReg  idInversion      Nombre ";
+		mostrarRegistroInversion(reg,nroReg);
+		reg.estado = 'S';
+		fseek(ptr,(nroReg-1)*sizeof(struct Inversion),SEEK_SET);
+		fwrite(&reg,sizeof(struct Inversion),1,ptr);
+		cout<<endl<<" Registro Eliminado Exitosamente..."<<endl;
+	}
+	else{
+		cout<<endl<<" Registro Eliminado.."<<endl;
+	}
+	fclose(ptr);
+}
+}
+}
+void ListarArchivoInversion(char nomArchivo[15]){
+FILE *ptr;
+Inversion reg;
+int cont = 0;
+ptr = fopen(nomArchivo,"rb");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE..."<<endl;
+}
+else{
+cout<<endl<<"****   LISTAR ARCHIVO      ****";
+cout<<endl<<"nroReg    idInversion      Monto      Fecha    idProyecto     idInversionista";
+cout<<endl<<"==============================================================================";
+fread(&reg,sizeof(struct Inversion),1,ptr);
+while(!feof(ptr)){
+	if(reg.estado == 'N')
+		mostrarRegistroInversion(reg,cont+1);
+	fread(&reg,sizeof(struct Inversion),1,ptr);
+	cont++;
+}
+fclose(ptr);
+}
+}
+void MenuInversion(){ 
+int opc,nroReg; char nomArchivo[15];
+char op[20];
+do{ 
+    system("pause");
+	system("cls");
+cout<<endl<<" *** MENU    Inversion   *** ";
+cout<<endl<<" 1 Crear Archivo :";
+cout<<endl<<" 2 Adicionar Registro :";
+cout<<endl<<" 3 Buscar Registro :";
+cout<<endl<<" 4 Modoficar Registro :";
+cout<<endl<<" 5 Eliminar Registro :";
+cout<<endl<<" 6 Listar Archivo :";
+cout<<endl<<" 7 Atras :";
+ fflush(stdin);
+do{cout<<endl<<"opcion:";
+   gets(op);  
+}while(Cadena_No_Blanca(op) || ValidarDatoDeEntradaInt(op));
+opc = Conver_Char_Int(op);
+switch(opc){
+case 1: CrearArchivoInversion("Inversion.dat");break;
+case 2: AdicionarRegistroInversion("Inversion.dat");break;
+case 3: cout<<endl<<" numero de registro :";cin>>nroReg;BuscarRegistroInversion("Inversion.dat",nroReg);break;
+case 4: cout<<endl<<" numero de registro :";cin>>nroReg;ModificarRegistroInversion("Inversion.dat",nroReg);break;
+case 5: cout<<endl<<" numero de registro :";cin>>nroReg;EliminarRegistroInversion("Inversion.dat",nroReg);break;
+case 6: ListarArchivoInversion("Inversion.dat");break;
+}
+}
+while(opc != 7);
+
+system("pause");
+}
+
+
+
+//egresos.h
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+#include <conio.h>
+
+
+void CrearArchivoEgreso( char nomArchivo[15]){
+FILE *ptr;
+ptr=fopen(nomArchivo,"wb");
+fclose(ptr);
+}
+void SolicitarDatosEgreso(Egreso *reg){
+	char aux[20]; 
+	fflush(stdin);
+	 do{
+		 strcpy(aux," ");
+	 cout<<endl<<" IDEgreso :";
+	 gets(aux);
+	 }while((Cadena_No_Blanca(aux) || ValidarDatoDeEntradaInt(aux) )|| ValidarIdEgreso(Conver_Char_Int(aux)));
+	 reg->idegreso = Conver_Char_Int(aux);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<" Fecha dia/mes/ano :";
+	   gets(reg->fecha);
+	 }while(strlen(reg->fecha) == 0);
+	 fflush(stdin);
+	 do{ 
+     strcpy(aux," ");
+	 cout<<endl<<" monto :";
+	 gets(aux);
+	 }while((Cadena_No_Blanca(aux) || ValidarDatoDeEntradaInt(aux)));
+	 reg->monto = Cover_Char_Float(aux);
+	 fflush(stdin);
+	 do{
+	   cout<<endl<<" Descripcion :";
+	   gets(reg->descripcion);
+	 }while(strlen(reg->descripcion) == 0);
+	 fflush(stdin);
+	do{
+	 strcpy(aux," ");
+	 cout<<endl<<" idProyecto :";
+	 gets(aux);
+	}while((Cadena_No_Blanca(aux) || ValidarDatoDeEntradaInt(aux)) || !ValidarIdProyecto(Conver_Char_Int(aux)));
+	reg->idproyecto = Conver_Char_Int(aux);
+	 reg->estado = 'N';   ////  estado para saber que esta abilitado N 
+}
+void mostrarRegistroEgreso(Egreso reg, int nroReg){
+	cout<<endl<<nroReg<<".-  "<<reg.idegreso<<"     "<<reg.fecha<<"    "<<reg.monto<<"   "<<reg.descripcion<<"   "<<reg.idproyecto;
+}
+void AdicionarRegistroEgreso(char nomArchivo[15]){
+FILE *ptr;
+Egreso reg;
+ptr = fopen(nomArchivo,"ab");
+SolicitarDatosEgreso(&reg);
+fwrite(&reg,sizeof(struct Egreso),1,ptr);
+fclose(ptr);
+}
+void BuscarRegistroEgreso(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Egreso reg;
+ptr = fopen(nomArchivo,"rb");
+if( ptr == NULL){
+	cout<<endl<<" NO EXISTE ARCHVIO ...";
+}else{
+	fseek(ptr,(nroReg -1)*sizeof(struct Egreso),SEEK_SET);
+	fread(&reg,sizeof(struct Egreso),1,ptr);
+	if(feof(ptr)){
+	cout<<endl<<" el registro no existe... "<<endl; 
+	}else{
+		if(reg.estado == 'N'){
+		 mostrarRegistroEgreso(reg,nroReg);
+		}
+		else{
+			cout<<endl<<" El Registro esta elimnado...";
+		}
+		fclose(ptr);
+
+	}
+    
+}
+}
+void ModificarRegistroEgreso(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Egreso reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIV NO EXISTE...";
+}
+else
+{
+fseek(ptr,(nroReg-1)*sizeof(struct Egreso),SEEK_SET);
+fread(&reg,sizeof(struct Egreso),1,ptr);
+	if(feof(ptr))
+	{
+			cout<<endl<<" El Registro no existe..."<<endl;
+	}
+	else{
+		if(reg.estado == 'N'){
+		   cout<<endl<<"nroReg    idEgreso      Fecha      Monto     Descripcion    idProyecto";
+		   mostrarRegistroEgreso(reg,nroReg);
+		   SolicitarDatosEgreso(&reg);
+		   fseek(ptr,(nroReg-1)*sizeof(struct Egreso),SEEK_SET);
+		   fwrite(&reg,sizeof(struct Egreso),1,ptr);
+		}
+		else{
+		cout<<endl<<" Registro Eliminado...";
+		fclose(ptr);
+		}
+	 }
+}
+}
+void EliminarRegistroEgreso(char nomArchivo[15], int nroReg){
+FILE *ptr;
+Egreso reg;
+ptr =fopen(nomArchivo,"r+b");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE...."<<endl;
+}else{
+fseek(ptr,(nroReg-1)*sizeof(struct Egreso),SEEK_SET);
+fread(&reg,sizeof(struct Egreso),1,ptr);
+if(feof(ptr)){
+cout<<endl<<" EL Registro No Existe..."<<endl;
+}
+else{
+	if(reg.estado == 'N'){
+
+        cout<<endl<<"nroReg    idEgreso      Fecha      Monto     Descripcion    idProyecto";
+		mostrarRegistroEgreso(reg,nroReg);
+		reg.estado = 'S';
+		fseek(ptr,(nroReg-1)*sizeof(struct Egreso),SEEK_SET);
+		fwrite(&reg,sizeof(struct Egreso),1,ptr);
+		cout<<endl<<" Registro Eliminado Exitosamente..."<<endl;
+	}
+	else{
+		cout<<endl<<" Registro Eliminado.."<<endl;
+	}
+	fclose(ptr);
+}
+}
+}
+void ListarArchivoEgreso(char nomArchivo[15]){
+FILE *ptr;
+Egreso reg;
+int cont = 0;
+ptr = fopen(nomArchivo,"rb");
+if(ptr == NULL){
+cout<<endl<<" EL ARCHIVO NO EXISTE..."<<endl;
+}
+else{
+cout<<endl<<"****   LISTAR ARCHIVO      ****";
+cout<<endl<<"nroReg    idEgreso      Fecha      Monto     Descripcion    idProyecto";
+cout<<endl<<"=======================================================================";
+fread(&reg,sizeof(struct Egreso),1,ptr);
+while(!feof(ptr)){
+	if(reg.estado == 'N')
+		mostrarRegistroEgreso(reg,cont+1);
+	fread(&reg,sizeof(struct Egreso),1,ptr);
+	cont++;
+}
+fclose(ptr);
+}
+}
+void MenuEgreso(){ 
+int opc,nroReg; char nomArchivo[15]; char op[20];
+do{ 
+    system("pause");
+	system("cls");
+cout<<endl<<" *** MENU    Egreso   *** ";
+cout<<endl<<" 1 Crear Archivo :";
+cout<<endl<<" 2 Adicionar Registro :";
+cout<<endl<<" 3 Buscar Registro :";
+cout<<endl<<" 4 Modoficar Registro :";
+cout<<endl<<" 5 Eliminar Registro :";
+cout<<endl<<" 6 Listar Archivo :";
+cout<<endl<<" 7 Atras :";
+do{cout<<endl<<"opcion:";
+   gets(op);  
+}while(Cadena_No_Blanca(op) || ValidarDatoDeEntradaInt(op));
+opc = Conver_Char_Int(op);
+switch(opc){
+case 1: CrearArchivoEgreso("Egreso.dat");break;
+case 2: AdicionarRegistroEgreso("Egreso.dat");break;
+case 3: cout<<endl<<" numero de registro :";cin>>nroReg;BuscarRegistroEgreso("Egreso.dat",nroReg);break;
+case 4: cout<<endl<<" numero de registro :";cin>>nroReg;ModificarRegistroEgreso("Egreso.dat",nroReg);break;
+case 5: cout<<endl<<" numero de registro :";cin>>nroReg;EliminarRegistroEgreso("Egreso.dat",nroReg);break;
+case 6: ListarArchivoEgreso("Egreso.dat");break;
+}
+}
+while(opc != 7);
+
+system("pause");
+}
+
+
+
+
+//configure.h
+void CrearArchivoConfig(char nomArchivo[15])
+{ FILE *ptr;  
+  ptr =fopen(nomArchivo,"w");  
+  fclose(ptr);
+
+}
+void AdicionarRegistroConfig(char nomArchivo[15]){
+	FILE *ptr;
+	char cad[200], op[4];
+	ptr = fopen(nomArchivo,"a");
+	if(ptr != NULL)
+	{     do{ 
+		      do{cout<<endl<<"Ingrese datos En La Cadena :";
+		      gets(cad);
+			  }while(strlen(cad) == 0);
+			  fputs(cad,ptr);
+			  do{
+			  cout<<endl<<" Otra Cadena  Si = S/No = N :";
+			  gets(op);
+			  }while(strlen(op) == 0);
+
+	        }while( op[0] != 'N');
+	fclose(ptr);
+	}
+	else{
+	 cout<<endl<<" El Archivo No Existe....."<<endl;
+	}
+
+}
+void LeeerArchivoConfig(char nomArchivo[15])
+{ FILE *ptr;
+char cad[200];
+ptr = fopen(nomArchivo,"rb");
+	if(ptr != NULL)
+	{    while (!feof(ptr))
+	    {
+			fgets(cad,200,ptr);
+			puts(cad); 
+	    }
+	    fclose(ptr);  
+	}
+	else{
+	cout<<endl<<"El Archivo No Existe....."<<endl;
+	}
+
+}
+void MenuConfig()
+{    char op[20];
+     int opc;
+	 do{
+		  system("pause");
+	      system("cls");
+	 cout<<endl<<"1 Crear Archivo :";
+	 cout<<endl<<"2 Adicionar Archivo :";
+	 cout<<endl<<"3 Leer Archivo :";
+	 cout<<endl<<"4 Atras :";
+	 do{ cout<<endl<<"opcion :";
+		 gets(op);
+	 }while (Cadena_No_Blanca(op) || ValidarDatoDeEntradaInt(op));
+	 opc = Conver_Char_Int(op);
+	 switch (opc)
+	 {   
+	 case 1:CrearArchivoConfig("Config.txt");break;
+	 case 2:AdicionarRegistroConfig("Config.txt");break;
+	 case 3:LeeerArchivoConfig("Config.txt");break;
+	 }
+     }while (opc != 4);
+
+	 system("PAUSE");
+}
+
+
+
+//reporte.h
+float TotalDeInvercionProyecto(int idproye,char fechafinal[] )
+{FILE *ptr;
+Inversion reg;
+ float total = 0;
+ ptr =fopen("Inversion.dat","rb");
+ fread(&reg,sizeof(reg),1,ptr);
+ while(!feof(ptr))
+ {   
+	 if(reg.idProyecto == idproye && VerificarRangoFechas(reg.fecha,fechafinal))
+	 {
+		 total += reg.monto;
+	 }
+	 fread(&reg,sizeof(reg),1,ptr);
+ }
+ fclose(ptr);
+ return total;
+}
+void ReporteDeInversiones(){
+	FILE *ptr;
+	Proyecto reg;
+	char fecha1[11],fecha2[11];
+	float sumainvercion = 0, total = 0;
+	ptr = fopen("Proyecto.dat","rb");
+	if(ptr != NULL){
+	  
+	  cout<<endl<<"             REPORTE DE INVERSION POR PROYECTO             ";
+
+		do{
+	  cout<<endl<<" Fecha incial : "<<endl;
+	  SolicitarFecha(fecha1);
+	  cout<<endl<<" Fecha final  : "<<endl;
+	  SolicitarFecha(fecha2);
+		}while(!VerificarRangoFechas(fecha1,fecha2));
+      cout<<endl<<"             REPORTE DE INVERSION POR PROYECTO            ";
+   	  cout<<endl<<"---------------------------------------------------------";
+	  cout<<endl<<"      fecha inicial          fecha final   ";
+	  cout<<endl<<"       "<<fecha1<<"            "<<fecha2;
+	  cout<<endl<<"   idpoyecto       Nombre         Inversion "; 
+	  cout<<endl<<"---------------------------------------------------------";
+	  fread(&reg,sizeof(reg),1,ptr);
+	  while(!feof(ptr))
+	  {     
+		  if( reg.estado == 'N')
+		  {  
+			  sumainvercion = TotalDeInvercionProyecto(reg.idProyecto,fecha2); 
+		      cout<<endl<<"    "<<reg.idProyecto<<"    "<<reg.nombre<<"    "<<sumainvercion;
+		      total += sumainvercion;
+		  }
+		  sumainvercion = 0;
+		fread(&reg,sizeof(reg),1,ptr);
+	  }
+	  fclose(ptr);
+	  cout<<endl<<"---------------------------------------------------------";
+	  cout<<endl<<" -------------   Total   ----------                "<<total;
+	}
+	else{
+	cout<<endl<<" NO Existe archivo ..."<<endl;
+	fclose(ptr);
+	}
+
+}
+float TotalDeEgresoProyecto(int idproye,char fechafinal[] )
+{FILE *ptr;
+Egreso reg;
+ float total = 0;
+ ptr =fopen("Egreso.dat","rb");
+ fread(&reg,sizeof(reg),1,ptr);
+ while(!feof(ptr))
+ {   
+	 if(reg.idproyecto== idproye && VerificarRangoFechas(reg.fecha,fechafinal))
+	 {
+		 total += reg.monto;
+	 }
+	 fread(&reg,sizeof(reg),1,ptr);
+ }
+ fclose(ptr);
+ return total;
+}
+
+void ReporteDeEgreso(){
+	FILE *ptr;
+	Proyecto reg;
+	char fecha1[11],fecha2[11];
+	float sumainvercion = 0, total = 0;
+	ptr = fopen("Proyecto.dat","rb");
+	if(ptr != NULL){
+     cout<<endl<<"             REPORTE DE EGRESO POR PROYECTO             ";		 
+		do{
+	  cout<<endl<<" Fecha incial : "<<endl;
+	  SolicitarFecha(fecha1);
+	  cout<<endl<<" Fecha final  : "<<endl;
+	  SolicitarFecha(fecha2);
+		}while(!VerificarRangoFechas(fecha1,fecha2));
+      cout<<endl<<"             REPORTE DE EGRESO POR PROYECTO             ";
+	  cout<<endl<<"---------------------------------------------------------";
+	  cout<<endl<<"      fecha inicial          fecha final   ";
+	  cout<<endl<<"       "<<fecha1<<"            "<<fecha2;
+	  cout<<endl<<"   idpoyecto       Nombre                       Egreso "; 
+	  cout<<endl<<"---------------------------------------------------------";
+	  fread(&reg,sizeof(reg),1,ptr);
+	  while(!feof(ptr))
+	  {     
+		  if( reg.estado == 'N')
+		  {  
+			  sumainvercion = TotalDeEgresoProyecto(reg.idProyecto,fecha2);
+		      cout<<endl<<"    "<<reg.idProyecto<<"    "<<reg.nombre<<"    "<<sumainvercion;
+		      total += sumainvercion;
+		  }
+		  sumainvercion = 0;
+		fread(&reg,sizeof(reg),1,ptr);
+	  }
+	  fclose(ptr);
+	  cout<<endl<<"---------------------------------------------------------";
+	  cout<<endl<<" -------------   Total   ----------                "<<total;
+	}
+	else{
+	cout<<endl<<" No Existe Archivo ..."<<endl;
+	fclose(ptr);
+	}
+
+} 
+float ObtenerInversion( int id)
+{ FILE *ptr;
+ Inversion reg;
+  float total;
+ ptr = fopen("Inversion.dat","rb");
+ fread(&reg,sizeof(reg),1,ptr);
+ while(!feof(ptr)){
+	 if(reg.idProyecto == id)
+	 {
+		 total = total + reg.monto;
+	 }
+     fread(&reg,sizeof(reg),1,ptr);
+ }
+ fclose(ptr);
+ return total;
+}
+float ObtenerGastos(int id){
+FILE *ptr;
+Egreso reg;
+float total;
+ptr =fopen("Egreso.dat","rb");
+fread(&reg,sizeof(reg),1,ptr);
+while(!feof(ptr))
+{	if(reg.idproyecto == id)
+	{
+		total+= reg.monto;
+	}
+	fread(&reg,sizeof(reg),1,ptr);
+}
+fclose(ptr);
+return total;
+}
+void Reporte(){
+FILE *ptr; 
+Proyecto reg;
+float inver,gastos,pimp,total,saldo;
+int cant;
+ptr =fopen("Proyecto.dat","rb");
+cout<<endl<<" -------------REPORTE DE SALDO POR  PROYECTO  ---------------";
+cout<<endl<<"  NOMBRE          INVERSION       GASTOS         IMPUESTO          SALDO :";
+fread(&reg,sizeof(reg),1,ptr);
+while(!feof(ptr))
+{  inver = ObtenerInversion(reg.idProyecto);   
+   gastos = ObtenerGastos(reg.idProyecto);
+   pimp = (inver*0.105);
+   gastos = gastos + pimp;
+   saldo = inver - gastos;
+   cout<<endl<<reg.nombre<<"       "<<inver<<"   "<<gastos<<"    "<<pimp<<"     "<<saldo;
+   total+=saldo;
+   inver=gastos =saldo=0;
+ fread(&reg,sizeof(reg),1,ptr);
+}
+cout<<endl<<" TOTAL DE SALDO --------------------------------------------------------"<<total;
+fclose(ptr);
+}
+
+
+
+//validaciones.h
+bool ValidarDatoDeEntradaInt(char cad[20])
+{ int conv;     
+ conv = atoi(cad);
+ if(conv == 0) return true;
+ else return false;
+}
+bool ValidarDatoDeEntradaFloat(char cad[20])
+{
+ float conv;     
+ conv = atof(cad);
+ if(conv == 0) return true; 
+ else return false;
+}
+int Conver_Char_Int(char cad[20])
+{ int aux; 
+   aux = atoi(cad);      
+   return (aux);
+}
+float Cover_Char_Float(char cad[20])
+{float aux;
+   aux = atof(cad);
+   return (aux);
+}
+bool Cadena_No_Blanca(char cad[20])
+{
+     if(strlen(cad) == 0) return true;
+	 else return false;
+}
+
+bool ValidarIdProyecto(int idpro){
+
+FILE *ptr;
+Proyecto regP;
+ptr = fopen("Proyecto.dat","rb");
+fread(&regP,sizeof(regP),1,ptr); if(idpro == regP.idProyecto) return true;
+while(!feof(ptr)){ fread(&regP,sizeof(regP),1,ptr); if(regP.idProyecto == idpro){fclose(ptr); return true;}}
+	fclose(ptr);
+	return false;
+}
+bool ValidarIdHolaMundo(int idpro){
+
+FILE *ptr;
+HolaMundo regH;
+ptr = fopen("HolaMundo.dat","rb");
+fread(&regH,sizeof(regH),1,ptr); if(idpro == regH.idHolaMundo) return true;
+while(!feof(ptr)){ fread(&regH,sizeof(regH),1,ptr); if(regH.idHolaMundo == idpro){fclose(ptr); return true;}}
+	fclose(ptr);
+	return false;
+}
+bool ValidarIdInversionista(int idinver){
+FILE *ptr;
+Inversionista regI;
+ptr = fopen("Inversionista.dat","rb");
+fread(&regI,sizeof(regI),1,ptr);if(regI.idInversionista == idinver) return true;
+while(!feof(ptr)){ fread(&regI,sizeof(regI),1,ptr);if(regI.idInversionista  == idinver){fclose(ptr); return true;}}
+fclose(ptr);
+return false;
+}
+
+bool ValidarIdInversion(int idinv){
+FILE *ptr;
+Inversion reg;
+ptr=fopen("Inversion.dat","rb");
+fread(&reg,sizeof(reg),1,ptr); if(reg.idinversion == idinv) {fclose(ptr); return true;}
+while(!feof(ptr)){fread(&reg,sizeof(reg),1,ptr); if(reg.idinversion == idinv){fclose(ptr); return true;}}
+fclose(ptr);
+return false;
+}
+
+bool ValidarIdEgreso(int idegre)
+{
+FILE *ptr;
+Egreso regE;
+ptr=fopen("Egreso.dat","rb");
+fread(&regE,sizeof(regE),1,ptr); if(regE.idegreso == idegre) return true;
+while(!feof(ptr)){
+	fread(&regE,sizeof(regE),1,ptr); if(regE.idegreso == idegre){ fclose(ptr); return true;	} }
+fclose(ptr);
+return false;
+}
+
+
+
+bool bisiesto(unsigned int ano){
+	if(((ano%4==0) && (ano%100!=0)) || (ano%400==0)) return true;
+	return false;
+}
+
+enum e{ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO,AGOSTO,SEPTIEMBRE,OCTUBRE,NOVIEMBRE,DICIEMBRE};
+
+int diasdelmes(int mes,int ano){
+ int diasmes;
+		switch(mes){
+		case ENERO:
+		case MARZO: 
+		case MAYO:
+		case JULIO: 
+		case AGOSTO: 
+		case OCTUBRE:
+		case DICIEMBRE: 
+			diasmes=31; break; 
+		case FEBRERO: 
+			if(bisiesto(ano)) diasmes=29; 
+			else diasmes=28;
+			break;
+		case ABRIL: 
+		case JUNIO: 
+		case SEPTIEMBRE: 
+		case NOVIEMBRE: 
+			diasmes=30; break;
+		}
+		return diasmes;
+}
+
+void SolicitarFecha(char fecha[]){
+	 int ano,mes,dia,diasmes;
+	char cano[5],cmes[3],cdia[3];
+	char aux[20];
+		do{ 
+			strcpy(aux," ");
+			cout<<"a\xa4o: "; gets(aux); 
+		}while( Conver_Char_Int(aux)>9999 || ValidarDatoDeEntradaInt(aux));
+		ano = Conver_Char_Int(aux);
+		do{ 
+			strcpy(aux," ");
+			cout<<"mes: "; gets(aux);
+		
+		}while(Conver_Char_Int(aux)>12 || ValidarDatoDeEntradaInt(aux));
+		mes = Conver_Char_Int(aux);
+		diasmes=diasdelmes(mes-1,ano);
+			do{
+				strcpy(aux," ");
+				cout<<"dia: ";  gets(aux); 	
+			}while(Conver_Char_Int(aux)>diasmes ||  ValidarDatoDeEntradaInt(aux));
+			dia = Conver_Char_Int(aux);
+		itoa(dia,cdia,10);
+		itoa(mes,cmes,10);
+		itoa(ano,cano,10);	
+		
+		if(dia<10) {fecha[0]='0';fecha[1]='\0';
+		strcat(fecha,cdia);
+		}
+		else {fecha[0]='\0'; cdia[2]='\0';
+		strcat(fecha,cdia);}
+
+		fecha[2]='//';fecha[3]='\0';
+
+		if(mes<10) {fecha[3]='0';fecha[4]='\0';
+		strcat(fecha,cmes);
+		}
+		else {cmes[2]='\0';strcat(fecha,cmes);}
+
+		fecha[5]='//';fecha[6]='\0';
+		strcat(fecha,cano);
+}
+
+void LeerFecha(char fecha[],int &ano,int &mes,int &dia){
+	char cano[5],cmes[3],cdia[3];
+
+	cdia[0]=fecha[0];	cdia[1]=fecha[1];	cdia[2]='\0';
+	cmes[0]=fecha[3];	cmes[1]=fecha[4];	cmes[2]='\0';
+	cano[0]=fecha[6];	cano[1]=fecha[7];   cano[2]=fecha[8];	cano[3]=fecha[9];	cano[4]='\0';
+
+	dia=atoi(cdia);
+	mes=atoi(cmes);
+	ano=atoi(cano);
+}
+
+bool VerificarRangoFechas(char fecha1[],char fecha2[]){
+		 int ano1,mes1,dia1;
+		 int ano2,mes2,dia2;
+
+		LeerFecha(fecha1,ano1,mes1,dia1);
+		LeerFecha(fecha2,ano2,mes2,dia2);
+
+		if(ano2 > ano1){
+			if(mes2 > mes1){ 
+				if(dia2 > dia1){return true;}
+			    }
+			else if(mes2 == mes1)
+			    {
+           		    return true;
+			}else{
+			   return false;
+			}
+			
+		}
+		else if(ano2 == ano1){
+			if(mes2 == mes1)
+			{
+				if(dia2 == dia1)
+				{
+					return true;
+				}
+				else{
+				return false;
+				}
+			}
+			else if(mes2 > mes1)
+			{
+			  return true;				
+			}else{
+			 return false;
+			}
+		}
+		else{
+	       return false;
+		}
+}
+
+bool FechasIguales(char fecha1[],char fecha2[]){
+        int ano1,mes1,dia1;
+		int ano2,mes2,dia2;
+
+		LeerFecha(fecha1,ano1,mes1,dia1);
+		LeerFecha(fecha2,ano2,mes2,dia2);
+
+
+		if(ano2==ano1) 
+		if(mes2==mes1)
+			if(dia2==dia1) return true;
+		
+		return false;
+}
+
+
+//estructura.h
+struct Proyecto
+{
+	int idProyecto;
+	char nombre[50];  
+	char estado;
+};
+Proyecto regP;
+struct Inversionista
+{   int idInversionista;
+    char nombre[50];
+	char ci[10];
+	char telefono[12];
+	char  email[50];
+	char estado;
+};
+Inversionista regI;
+struct Inversion
+{  int idinversion;
+   float monto;
+   char fecha[20];
+   int idProyecto;
+   int idInversionista;
+   char estado;
+};
+Inversion reg;
+
+struct Egreso
+{  int idegreso;
+   char fecha[10];
+   float monto;
+   char descripcion[30];
+   int idproyecto;
+   char estado;
+};
+
+Egreso regE;
